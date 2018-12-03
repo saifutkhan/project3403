@@ -1,0 +1,68 @@
+<html>
+<head>
+	<title>Update item</title>
+</head>
+
+</body>
+<div align="center">
+	<h4>Delete an item </h4>
+
+	<h4>Using HTTP DELETE method to route <code>/items</code></h4>
+</div>
+
+<div>Note: that itemName must exist</div>
+
+<form id="deleteItemForm" action="/items?_method=DELETE" method="POST">
+
+  Enter item name: <input type="text" name="itemName"><br>
+  
+  Enter description: <input type="text" name="description" disabled><br>
+  
+  Enter category: <input type="text" name="category" disabled><br>
+  
+  Enter price: <input type="text" name="price" disabled><br>
+  
+  <input type="button" value="Load Item Data" onclick="loadData()"/>
+  &nbsp;&nbsp;&nbsp;
+  <input type="submit" value="Delete Item" />
+</form>
+
+<script>
+        function handleResponse() {
+            console.log(this.responseText);
+    
+            let deleteForm = document.getElementById("deleteItemForm");
+    
+            //convert responseText to a JS object
+            let jsonArray = JSON.parse(this.responseText);
+    
+            if (jsonArray.length == 0) {
+              alert("No data found for item " + updateForm.elements["itemName"].value);
+              return;
+            }
+            
+            //get the references to the textboxes and display 
+            //the data from server inside them.
+            let tDescription = deleteForm.elements["description"];
+            tDescription.value = jsonArray[0].description;
+    
+            let tCategory = deleteForm.elements["category"];
+            tCategory.value = jsonArray[0].category;
+    
+            let tPrice = deleteForm.elements["price"];
+            tPrice.value = jsonArray[0].price;
+        }
+    
+        //load the item data from server
+        function loadData() {
+            let updateForm = document.getElementById("deleteItemForm");
+            let itemName = updateForm.elements["itemName"].value;
+    
+            let httpRequest = new XMLHttpRequest();
+            httpRequest.addEventListener("load", handleResponse);
+            httpRequest.open("GET", "http://localhost:7979/items/"+itemName);
+            httpRequest.send();
+        }
+      </script>
+</body>
+</html> 

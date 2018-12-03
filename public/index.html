@@ -1,0 +1,57 @@
+<html>
+	<head>
+		<title>Items</title>
+	</head>
+
+	<body>
+
+        <h3>Example Items Application with express.js + mongodb and web pages (using REST and XHR).</h3>
+		<div id="itemsCount"> </div>
+		<div id="itemsDiv"> </div>
+
+        <br />
+
+        <div align="center">
+            <a href="AddItem.html">Add a new item</a> (using POST to /items)
+            <br />
+            <a href="UpdateItem.html">Update an item</a> (using PUT to /items)
+            <br />
+            <a href="DeleteItem.html">Delete an item</a> (using DELETE to /items)
+        </div>
+
+        <script>
+			function handleResponse() {
+  				console.log(this.responseText);
+
+  				let itemsDiv = document.getElementById("itemsDiv");
+  				//convert responseText to a JS object
+  				let jsonArray = JSON.parse(this.responseText);
+
+  				let itemsCount = document.getElementById("itemsCount");
+  				itemsCount.innerHTML = "We have found " +jsonArray.length + " items!";
+
+  				let counter = 0;
+  				for (let item of jsonArray) {
+  					let span = document.createElement("span");
+                      let itemString = ++counter +". "+item.item_name + " - " + item.category + " - " + item.description  
+                                        + " Price AED "+item.price.toFixed(2);
+  					let spanText = document.createTextNode(itemString);
+  					span.appendChild(spanText);
+
+  					//add the p to the itemsDiv
+                    itemsDiv.appendChild(span);
+                    itemsDiv.appendChild(document.createElement("br"));  
+  				}
+			}
+
+			let httpRequest = new XMLHttpRequest();
+			httpRequest.addEventListener("load", handleResponse);
+			const port = process.env.PORT;
+			const url="http://saifitems.eu-4.evennode.com:"+port;
+			httpRequest.open("GET", url);
+			httpRequest.send();
+		</script>
+
+	</body>
+
+</html>

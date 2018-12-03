@@ -1,0 +1,44 @@
+<html>
+	<head>
+		<title>Items</title>
+	</head>
+
+	<body>
+
+		<div id="itemsCount"> </div>
+		<div id="itemsDiv"> </div>
+
+		<script>
+			function handleResponse() {
+  				console.log(this.responseText);
+
+  				let itemsDiv = document.getElementById("itemsDiv");
+  				//convert responseText to a JS object
+  				let jsonArray = JSON.parse(this.responseText);
+
+  				let itemsCount = document.getElementById("itemsCount");
+  				itemsCount.innerHTML = "We have found " +jsonArray.length + " items!";
+
+  				let counter = 0;
+  				for (let item of jsonArray) {
+  					let p = document.createElement("p");
+  					let itemString = counter+ ". "+item.item_name + " Price AED "+item.price.toFixed(2);
+  					let pText = document.createTextNode(itemString);
+  					p.appendChild(pText);
+
+  					//add the p to the itemsDiv
+  					itemsDiv.appendChild(p);
+  				}
+			}
+
+			let httpRequest = new XMLHttpRequest();
+			httpRequest.addEventListener("load", handleResponse);
+			const port = process.env.PORT;
+			const url="http://saifitems.eu-4.evennode.com:"+port;
+			httpRequest.open("GET", url);
+			httpRequest.send();
+		</script>
+
+	</body>
+
+</html>
